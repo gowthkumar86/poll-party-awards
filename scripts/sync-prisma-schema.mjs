@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import 'dotenv/config'
 
 const ROOT = process.cwd();
 const templatePath = path.join(ROOT, "prisma", "schema.template.prisma");
