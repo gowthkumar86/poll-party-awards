@@ -1,5 +1,6 @@
+"use client";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, Sparkles, Users, MessageSquareQuote, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 export default function CreatePoll() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [password, setPassword] = useState("");
@@ -40,15 +41,7 @@ export default function CreatePoll() {
 
 
   const redirectToPoll = (id: string) => {
-    const target = `/poll/${id}`;
-    navigate(target);
-
-    // Fallback hard navigation in case client-side routing does not fire.
-    window.setTimeout(() => {
-      if (window.location.pathname !== target) {
-        window.location.assign(target);
-      }
-    }, 150);
+    router.push(`/poll/${id}`);
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

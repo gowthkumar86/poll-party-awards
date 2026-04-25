@@ -1,5 +1,6 @@
+"use client";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { LayoutDashboard, PlusCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import { api } from "@/lib/api";
 import type { CompletedPollSummary } from "@/lib/types";
 
 export default function Index() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { toast } = useToast();
   const [polls, setPolls] = useState<CompletedPollSummary[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ export default function Index() {
   const openPoll = (dashboard: boolean) => {
     const clean = pollIdInput.trim();
     if (!clean) return;
-    navigate(dashboard ? `/dashboard/${clean}` : `/poll/${clean}`);
+    router.push(dashboard ? `/dashboard/${clean}` : `/poll/${clean}`);
   };
 
   return (
@@ -66,7 +67,7 @@ export default function Index() {
           <div className="flex flex-wrap gap-3">
             <Button
               type="button"
-              onClick={() => navigate("/create")}
+              onClick={() => router.push("/create")}
               className="h-11 rounded-2xl bg-gradient-primary px-5 font-semibold text-primary-foreground shadow-glow"
             >
               <PlusCircle className="mr-2 h-4 w-4" /> Create new poll
@@ -127,7 +128,7 @@ export default function Index() {
                       {new Date(poll.createdAt).toLocaleString()} • {poll.id}
                     </p>
                   </div>
-                  <Button type="button" onClick={() => navigate(`/dashboard/${poll.id}`)} className="rounded-2xl">
+                  <Button type="button" onClick={() => router.push(`/dashboard/${poll.id}`)} className="rounded-2xl">
                     View dashboard
                   </Button>
                 </div>

@@ -1,5 +1,6 @@
-﻿import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+﻿"use client";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Copy, Check, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,9 @@ import type { PollBundle } from "@/lib/types";
 import { NameAvatar } from "@/components/NameAvatar";
 
 export default function PollLobby() {
-  const { id = "" } = useParams();
-  const navigate = useNavigate();
+  const params = useParams();
+  const id = params?.id as string;
+  const router = useRouter();
   const { toast } = useToast();
   const [bundle, setBundle] = useState<PollBundle | null>(null);
   const [password, setPassword] = useState(session.load(id)?.password ?? "");
@@ -37,7 +39,7 @@ export default function PollLobby() {
       setAuthed(true);
       session.save(id, { password: pw, voterName: session.load(id)?.voterName });
       if (data.poll.status === "closed") {
-        navigate(`/dashboard/${id}`);
+        router.push(`/dashboard/${id}`);
       }
     } catch (err) {
       toast({
@@ -59,7 +61,7 @@ export default function PollLobby() {
   const handlePickName = (name: string, hasSubmitted: boolean) => {
     if (hasSubmitted) return;
     session.save(id, { password, voterName: name });
-    navigate(`/poll/${id}/vote`);
+    router.push(`/poll/${id}/vote`);
   };
 
   const closePollWithPassword = async (closePasswordInput: string) => {
@@ -68,7 +70,7 @@ export default function PollLobby() {
       await api.closePoll(id, closePasswordInput);
       setShowCloseConfirm(false);
       setClosePassword("");
-      navigate(`/dashboard/${id}`);
+      router.push(`/dashboard/${id}`);
     } catch (err) {
       toast({
         title: "Couldn't close",

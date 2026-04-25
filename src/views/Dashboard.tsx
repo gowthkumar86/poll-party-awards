@@ -1,5 +1,6 @@
+"use client";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useRouter, useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Trophy, Users, BarChart3, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,8 +35,9 @@ function StatPill({ value, label }: { value: number; label: string }) {
 }
 
 export default function Dashboard() {
-  const { id = "" } = useParams();
-  const navigate = useNavigate();
+  const params = useParams();
+  const id = params?.id as string;
+  const router = useRouter();
   const { toast } = useToast();
   const [password, setPassword] = useState(session.load(id)?.password ?? "");
   const [data, setData] = useState<DashboardData | null>(null);
@@ -60,7 +62,7 @@ export default function Dashboard() {
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("after poll closes")) {
         toast({ title: "Poll still active", description: "Results unlock when the host closes the poll." });
-        navigate(`/poll/${id}`);
+        router.push(`/poll/${id}`);
       } else {
         toast({ title: "Couldn't load", description: msg, variant: "destructive" });
       }

@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useRouter, useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,8 +11,9 @@ import type { PollBundle } from "@/lib/types";
 import { NameAvatar } from "@/components/NameAvatar";
 
 export default function VoteFlow() {
-  const { id = "" } = useParams();
-  const navigate = useNavigate();
+  const params = useParams();
+  const id = params?.id as string;
+  const router = useRouter();
   const { toast } = useToast();
 
   const sess = session.load(id);
@@ -24,7 +27,7 @@ export default function VoteFlow() {
 
   useEffect(() => {
     if (!password || !voterName) {
-      navigate(`/poll/${id}`);
+      router.push(`/poll/${id}`);
       return;
     }
     api
@@ -34,11 +37,11 @@ export default function VoteFlow() {
         if (!me) throw new Error("Name not found");
         if (me.hasSubmitted) {
           toast({ title: "Already voted", description: "This name has already submitted." });
-          navigate(`/poll/${id}`);
+          router.push(`/poll/${id}`);
           return;
         }
         if (b.poll.status !== "active") {
-          navigate(`/dashboard/${id}`);
+          router.push(`/dashboard/${id}`);
           return;
         }
         setBundle(b);
@@ -82,7 +85,7 @@ export default function VoteFlow() {
     try {
       await api.submitVotes({ pollId: id, voterName, password, answers });
       toast({ title: "Locked in 🔒", description: "Your votes are anonymous." });
-      navigate(`/poll/${id}`);
+      router.push(`/poll/${id}`);
     } catch (err) {
       toast({
         title: "Couldn't submit",
