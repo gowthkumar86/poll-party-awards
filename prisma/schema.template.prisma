@@ -1,0 +1,59 @@
+// Generated from prisma/schema.template.prisma via `npm run prisma:sync`.
+// Do not edit prisma/schema.prisma directly.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "__DB_PROVIDER__"
+  url      = env("DATABASE_URL")
+}
+
+model Poll {
+  id            String   @id @default(uuid())
+  title         String
+  password_hash String
+  status        String   @default("active")
+  created_at    DateTime @default(now())
+
+  questions Question[]
+  players   Player[]
+  responses Response[]
+}
+
+model Question {
+  id      String @id @default(uuid())
+  poll_id String
+  text    String
+
+  poll      Poll       @relation(fields: [poll_id], references: [id], onDelete: Cascade)
+  responses Response[]
+
+  @@index([poll_id])
+}
+
+model Player {
+  id            String  @id @default(uuid())
+  poll_id       String
+  name          String
+  has_submitted Boolean @default(false)
+
+  poll Poll @relation(fields: [poll_id], references: [id], onDelete: Cascade)
+
+  @@index([poll_id])
+  @@unique([poll_id, name])
+}
+
+model Response {
+  id                   String @id @default(uuid())
+  poll_id              String
+  question_id          String
+  selected_player_name String
+
+  poll     Poll     @relation(fields: [poll_id], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+
+  @@index([poll_id])
+  @@index([question_id])
+}
