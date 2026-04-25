@@ -4,21 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k \"npm:dev:web\" \"npm:dev:api\"",
-    "dev:web": "vite",
-    "dev:api": "next dev --webpack -p 3001",
-    "build": "vite build",
-    "build:api": "next build",
-    "build:dev": "vite build --mode development",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "prisma:sync": "node scripts/sync-prisma-schema.mjs",
-    "prisma:generate": "npm run prisma:sync && prisma generate --schema prisma/schema.prisma",
-    "prisma:migrate:dev": "npm run prisma:sync && prisma migrate dev --schema prisma/schema.prisma",
-    "prisma:push": "npm run prisma:sync && prisma db push --schema prisma/schema.prisma"
-  },
+  "dev": "next dev",
+  "build": "npm run prisma:generate && next build",
+  "start": "next start",
+  "prisma:sync": "node scripts/sync-prisma-schema.mjs",
+  "prisma:generate": "npm run prisma:sync && prisma generate --schema prisma/schema.prisma"
+},
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@prisma/client": "^6.16.2",
