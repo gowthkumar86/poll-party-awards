@@ -3,12 +3,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import CreatePoll from "./pages/CreatePoll.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import PollLobby from "./pages/PollLobby.tsx";
-import VoteFlow from "./pages/VoteFlow.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
+import Index from "./views/Index.tsx";
+import CreatePoll from "./views/CreatePoll.tsx";
+import NotFound from "./views/NotFound.tsx";
+import PollLobby from "./views/PollLobby.tsx";
+import VoteFlow from "./views/VoteFlow.tsx";
+import Dashboard from "./views/Dashboard.tsx";
 
 const queryClient = new QueryClient();
 

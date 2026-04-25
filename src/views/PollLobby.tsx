@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+ï»¿import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Copy, Check, Sparkles, Trophy } from "lucide-react";
@@ -154,7 +154,7 @@ export default function PollLobby() {
           </div>
           <h1 className="font-display text-4xl font-black leading-tight sm:text-5xl">{bundle.poll.title}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            {bundle.questions.length} questions · {bundle.players.length} friends invited
+            {bundle.questions.length} questions - {bundle.players.length} friends invited
           </p>
         </motion.header>
 
@@ -279,3 +279,4 @@ export default function PollLobby() {
     </div>
   );
 }
+
