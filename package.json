@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
-    "start": "next start"
+    "build": "npm run prisma:generate && next build",
+    "start": "next start",
+    "prisma:sync": "node scripts/sync-prisma-schema.mjs",
+    "prisma:generate": "npm run prisma:sync && prisma generate --schema prisma/schema.prisma"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
