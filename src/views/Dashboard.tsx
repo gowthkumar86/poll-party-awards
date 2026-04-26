@@ -24,12 +24,11 @@ const TABS: { key: Tab; label: string; icon: typeof Trophy }[] = [
   { key: "stats", label: "Stats", icon: BarChart3 },
 ];
 
-function StatPill({ value, label }: { value: number; label: string }) {
-  const n = useCountUp(value);
+function StatCard({ value, label }: { value: number; label: string }) {
   return (
-    <div className="rounded-2xl border border-white/70 bg-white/80 px-4 py-3 text-center shadow-soft">
-      <div className="font-display text-2xl font-black tabular-nums">{n}</div>
-      <div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</div>
+    <div className="rounded-xl bg-[#0b1220] border border-white/10 p-4 text-center shadow-lg">
+      <div className="text-3xl font-black text-purple-400">{value}</div>
+      <div className="text-xs text-gray-400 mt-1">{label}</div>
     </div>
   );
 }
@@ -82,7 +81,7 @@ export default function Dashboard() {
           }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card-strong w-full max-w-sm space-y-5 p-7 text-center"
+          className="card w-full max-w-sm space-y-5 p-7 text-center"
         >
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow">
             <Lock className="h-6 w-6" />
@@ -98,7 +97,7 @@ export default function Dashboard() {
               autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-12 rounded-2xl bg-white/80"
+              className="h-12 rounded-2xl bg-white/5"
             />
           </div>
           <Button
@@ -117,57 +116,62 @@ export default function Dashboard() {
   const currentModalP = modalP ? data.players.find((p) => p.name === modalP) : null;
 
   return (
-    <div className="min-h-screen px-5 pb-24 pt-10 sm:pt-14">
-      <div className="mx-auto w-full max-w-3xl">
-        {/* Header */}
+    <div className="app-bg min-h-screen px-5 pb-24 pt-10 sm:pt-14">
+      <div className="mx-auto w-full max-w-3xl space-y-8">
+
+        {/* HEADER */}
         <motion.header
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 text-center"
+          className="text-center space-y-4"
         >
-          <div className="mx-auto mb-3 inline-flex items-center gap-2 rounded-full bg-gradient-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-glow">
-            <Sparkles className="h-3 w-3" /> Results are in
+          <div className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-3 py-1 text-xs font-bold uppercase text-white shadow-glow">
+            <Sparkles className="h-3 w-3" />
+            Results are in
           </div>
-          <h1 className="font-display text-4xl font-black leading-[0.95] sm:text-6xl">
+
+          <h1 className="text-5xl sm:text-6xl font-black text-white drop-shadow-[0_5px_30px_rgba(124,58,237,0.4)]">
             <span className="gradient-text italic">{data.poll.title}</span>
           </h1>
         </motion.header>
 
-        {/* Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-6 grid grid-cols-4 gap-2 sm:gap-3"
-        >
-          <StatPill value={data.totals.participants} label="Friends" />
-          <StatPill value={data.totals.questions} label="Categories" />
-          <StatPill value={data.totals.responses} label="Votes" />
-          <StatPill value={Math.round(data.totals.completionRate * 100)} label="% in" />
-        </motion.div>
+        {/* SUMMARY */}
+        <div className="relative">
+          <div className="absolute -inset-2 bg-gradient-primary opacity-20 blur-2xl rounded-xl"></div>
 
-        {/* Tabs */}
-        <div className="mb-6">
-          <div className="glass-card flex gap-1 p-1.5">
+          <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <StatCard value={data.totals.participants} label="Friends" />
+            <StatCard value={data.totals.questions} label="Categories" />
+            <StatCard value={data.totals.responses} label="Votes" />
+            <StatCard value={Math.round(data.totals.completionRate * 100)} label="% in" />
+          </div>
+        </div>
+
+        {/* TABS */}
+        <div>
+          <div className="flex gap-2 p-1 bg-[#020617] border border-white/10 rounded-xl">
             {TABS.map((t) => {
               const active = tab === t.key;
               const Icon = t.icon;
+
               return (
                 <button
                   key={t.key}
                   type="button"
                   onClick={() => setTab(t.key)}
-                  className={`relative flex flex-1 items-center justify-center gap-2 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
-                    active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                    active
+                      ? "text-white"
+                      : "text-gray-400 hover:text-white"
                   }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="tabPill"
-                      transition={{ type: "spring", damping: 26, stiffness: 320 }}
-                      className="absolute inset-0 rounded-2xl bg-gradient-primary shadow-glow"
+                      className="absolute inset-0 rounded-xl bg-gradient-primary shadow-glow"
                     />
                   )}
+
                   <span className="relative flex items-center gap-1.5">
                     <Icon className="h-4 w-4" />
                     {t.label}
@@ -178,7 +182,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Tab content */}
+        {/* CONTENT */}
         <AnimatePresence mode="wait">
           <motion.div
             key={tab}
@@ -192,12 +196,17 @@ export default function Dashboard() {
             {tab === "stats" && <StatsTab data={data} onOpenCategory={setModalQ} />}
           </motion.div>
         </AnimatePresence>
+
       </div>
 
-      {/* Modals */}
+      {/* MODALS */}
       <AnimatePresence>
-        {currentModalQ && <CategoryModal result={currentModalQ} onClose={() => setModalQ(null)} />}
-        {currentModalP && <FriendDetail player={currentModalP} onClose={() => setModalP(null)} />}
+        {currentModalQ && (
+          <CategoryModal result={currentModalQ} onClose={() => setModalQ(null)} />
+        )}
+        {currentModalP && (
+          <FriendDetail player={currentModalP} onClose={() => setModalP(null)} />
+        )}
       </AnimatePresence>
     </div>
   );

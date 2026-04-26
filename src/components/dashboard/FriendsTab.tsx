@@ -20,7 +20,7 @@ export function FriendsTab({ players, onOpen }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.04 }}
           whileHover={{ y: -3 }}
-          className="group flex flex-col items-center rounded-3xl border border-white/70 bg-white/80 p-4 text-center shadow-soft transition hover:shadow-elevated"
+          className="group flex flex-col items-center rounded-3xl border p-4 text-center shadow-soft transition hover:shadow-elevated"
         >
           <NameAvatar name={p.name} size="lg" />
           <h3 className="mt-3 font-display text-base font-bold">{p.name}</h3>

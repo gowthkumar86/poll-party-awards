@@ -148,62 +148,79 @@ export default function PollLobby() {
   const pct = total ? Math.round((submittedCount / total) * 100) : 0;
 
   return (
-    <div className="min-h-screen px-5 py-10 sm:py-14">
-      <div className="mx-auto w-full max-w-2xl space-y-7">
-        <motion.header initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <div className="mx-auto mb-3 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-muted-foreground ring-1 ring-white/80">
-            <Sparkles className="h-3 w-3 text-primary" /> Active poll
+    <div className="app-bg min-h-screen px-5 py-10 sm:py-14">
+      <div className="mx-auto w-full max-w-2xl space-y-8">
+
+        {/* HEADER */}
+        <motion.header
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-3"
+        >
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#0b1220] border border-white/10 px-3 py-1 text-xs text-gray-400">
+            <Sparkles className="h-3 w-3 text-purple-400" />
+            Active poll
           </div>
-          <h1 className="font-display text-4xl font-black leading-tight sm:text-5xl">{bundle.poll.title}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {bundle.questions.length} questions - {bundle.players.length} friends invited
+
+          <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight">
+            {bundle.poll.title}
+          </h1>
+
+          <p className="text-sm text-gray-400">
+            {bundle.questions.length} questions • {bundle.players.length} friends
           </p>
         </motion.header>
 
+        {/* SHARE LINK */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="glass-card flex items-center gap-3 p-3"
+          className="card flex items-center gap-3 p-3"
         >
-          <div className="flex-1 truncate rounded-2xl bg-white/70 px-4 py-3 font-mono text-xs text-muted-foreground">
-            {window.location.href}
+          <div className="flex-1 truncate rounded-xl bg-[#020617] px-4 py-3 text-xs text-gray-400 font-mono">
+            {typeof window !== "undefined" ? window.location.href : ""}
           </div>
+
           <Button
             type="button"
             onClick={copyLink}
-            className="h-12 shrink-0 rounded-2xl bg-foreground/90 px-4 font-semibold text-background hover:bg-foreground"
+            className="h-11 rounded-xl bg-gradient-primary text-white px-4 shadow-glow"
           >
             {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            <span className="ml-1.5 hidden sm:inline">{copied ? "Copied" : "Share"}</span>
           </Button>
         </motion.div>
 
+        {/* PROGRESS */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="glass-card-strong p-6"
+          className="card p-6"
         >
-          <div className="mb-3 flex items-baseline justify-between">
-            <span className="text-sm font-semibold">Votes in</span>
-            <span className="font-display text-2xl font-bold tabular-nums">
-              {submittedCount}<span className="text-muted-foreground">/{total}</span>
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-sm text-gray-400 font-semibold">Votes in</span>
+            <span className="text-2xl font-bold text-white">
+              {submittedCount}
+              <span className="text-gray-500">/{total}</span>
             </span>
           </div>
-          <div className="h-3 overflow-hidden rounded-full bg-muted">
+
+          <div className="h-3 bg-[#1e293b] rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${pct}%` }}
-              transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
-              className="h-full rounded-full bg-gradient-primary"
+              transition={{ duration: 0.8 }}
+              className="h-full bg-gradient-primary"
             />
           </div>
         </motion.div>
 
+        {/* PLAYER GRID */}
         <div>
-          <h2 className="mb-3 px-1 text-sm font-semibold text-muted-foreground">Who are you?</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <h2 className="mb-4 text-sm text-gray-400 font-semibold px-1">
+            Who are you?
+          </h2>
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             <AnimatePresence>
               {bundle.players.map((p, idx) => (
                 <motion.button
@@ -214,20 +231,24 @@ export default function PollLobby() {
                   type="button"
                   disabled={p.hasSubmitted}
                   onClick={() => handlePickName(p.name, p.hasSubmitted)}
-                  className={`group relative flex flex-col items-center gap-2 rounded-3xl border p-4 text-center transition ${
+                  className={`group flex flex-col items-center gap-3 rounded-2xl border p-4 transition ${
                     p.hasSubmitted
-                      ? "cursor-not-allowed border-border/40 bg-muted/40 opacity-60"
-                      : "border-white/70 bg-white/80 hover:-translate-y-1 hover:border-primary/30 hover:shadow-elevated"
+                      ? "bg-[#020617] border-white/10 opacity-40 cursor-not-allowed"
+                      : "bg-[#0b1220] border-white/10 hover:border-purple-500 hover:-translate-y-1"
                   }`}
                 >
                   <NameAvatar name={p.name} size="md" />
-                  <span className="text-sm font-semibold">{p.name}</span>
+
+                  <span className="text-sm font-semibold text-white">
+                    {p.name}
+                  </span>
+
                   {p.hasSubmitted ? (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-accent-foreground/70">
+                    <span className="text-xs text-gray-500 font-bold uppercase">
                       voted
                     </span>
                   ) : (
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70 group-hover:text-primary">
+                    <span className="text-xs text-gray-400 group-hover:text-purple-400">
                       tap to vote
                     </span>
                   )}
@@ -237,7 +258,8 @@ export default function PollLobby() {
           </div>
         </div>
 
-        <div className="pt-2 text-center">
+        {/* CLOSE POLL */}
+        <div className="text-center pt-4">
           {!showCloseConfirm ? (
             <>
               <Button
@@ -248,37 +270,48 @@ export default function PollLobby() {
                 }}
                 disabled={closing}
                 variant="ghost"
-                className="rounded-2xl text-muted-foreground hover:bg-white/60 hover:text-foreground"
+                className="text-gray-400 hover:text-white"
               >
                 <Trophy className="mr-2 h-4 w-4" />
                 Close poll & reveal results
               </Button>
-              <p className="mt-1 text-xs text-muted-foreground">Host only - password required to close.</p>
+
+              <p className="text-xs text-gray-500 mt-1">
+                Host only — password required
+              </p>
             </>
           ) : (
-            <form onSubmit={confirmClose} className="glass-card mx-auto max-w-sm space-y-3 p-4 text-left">
-              <Label htmlFor="close-poll-password">Enter password to close this poll</Label>
+            <form
+              onSubmit={confirmClose}
+              className="card mx-auto max-w-sm space-y-4 p-4 text-left"
+            >
+              <Label>Enter password</Label>
+
               <Input
-                id="close-poll-password"
                 type="password"
                 value={closePassword}
                 onChange={(e) => setClosePassword(e.target.value)}
-                className="h-11 rounded-2xl bg-white/80"
-                placeholder="Group password"
+                className="bg-[#020617] border-white/10 text-white"
               />
+
               <div className="flex gap-2">
-                <Button type="button" variant="outline" onClick={() => setShowCloseConfirm(false)} className="flex-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowCloseConfirm(false)}
+                  className="flex-1"
+                >
                   Cancel
                 </Button>
+
                 <Button type="submit" disabled={closing} className="flex-1">
-                  {closing ? "Closing..." : "Confirm close"}
+                  {closing ? "Closing..." : "Confirm"}
                 </Button>
               </div>
             </form>
           )}
         </div>
+
       </div>
     </div>
-  );
-}
-
+  );}

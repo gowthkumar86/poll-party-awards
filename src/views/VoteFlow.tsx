@@ -104,20 +104,22 @@ export default function VoteFlow() {
   const progressPct = ((step + 1) / total) * 100;
 
   return (
-    <div className="flex min-h-screen flex-col px-5 py-8">
+    <div className="app-bg flex min-h-screen flex-col px-5 py-8">
       {/* Top bar */}
-      <div className="mx-auto w-full max-w-2xl">
-        <div className="mb-2 flex items-center justify-between text-xs font-semibold text-muted-foreground">
+      <div className="mx-auto w-full max-w-2xl space-y-3">
+        <div className="flex items-center justify-between text-xs font-semibold text-gray-400">
           <span>
-            Question <span className="text-foreground">{step + 1}</span> of {total}
+            Question <span className="text-white">{step + 1}</span> of {total}
           </span>
-          <span className="rounded-full bg-white/70 px-2.5 py-1 ring-1 ring-white/80">
-            voting as <span className="text-foreground">{voterName}</span>
+
+          <span className="rounded-full bg-[#0b1220] border border-white/10 px-3 py-1 text-white/80">
+            voting as <span className="text-white">{voterName}</span>
           </span>
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+
+        <div className="h-2 overflow-hidden rounded-full bg-[#1e293b]">
           <motion.div
-            className="h-full rounded-full bg-gradient-primary"
+            className="h-full bg-gradient-primary"
             initial={false}
             animate={{ width: `${progressPct}%` }}
             transition={{ duration: 0.4 }}
@@ -126,7 +128,7 @@ export default function VoteFlow() {
       </div>
 
       {/* Question */}
-      <div className="mx-auto mt-8 flex w-full max-w-2xl flex-1 flex-col">
+      <div className="mx-auto mt-10 flex w-full max-w-2xl flex-1 flex-col">
         <AnimatePresence mode="wait">
           <motion.div
             key={question.id}
@@ -135,34 +137,44 @@ export default function VoteFlow() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="mb-7 text-center">
-              <div className="mb-3 text-5xl">{question.emoji ?? "✨"}</div>
-              <h1 className="font-display text-3xl font-black leading-tight sm:text-4xl">{question.text}</h1>
+            {/* Question Header */}
+            <div className="mb-8 text-center space-y-3">
+              <div className="text-5xl">{question.emoji ?? "✨"}</div>
+
+              <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">
+                {question.text}
+              </h1>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {/* Choices */}
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {choices.map((c) => {
                 const selected = currentAnswer === c.name;
+
                 return (
                   <button
                     key={c.id}
                     type="button"
                     onClick={() => select(c.name)}
-                    className={`relative flex flex-col items-center gap-2 rounded-3xl border-2 p-4 text-center transition ${
+                    className={`relative flex flex-col items-center gap-3 rounded-2xl border p-4 transition ${
                       selected
-                        ? "border-primary bg-gradient-primary text-primary-foreground shadow-glow"
-                        : "border-white/70 bg-white/80 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-elevated"
+                        ? "border-transparent bg-gradient-primary text-white shadow-glow scale-[1.03]"
+                        : "bg-[#0b1220] border-white/10 hover:border-purple-500/40 hover:-translate-y-1"
                     }`}
                   >
-                    <NameAvatar name={c.name} size="md" className={selected ? "ring-white/80" : ""} />
-                    <span className={`text-sm font-semibold ${selected ? "text-primary-foreground" : ""}`}>
-                      {c.name}
-                    </span>
+                    <NameAvatar
+                      name={c.name}
+                      size="md"
+                      className={selected ? "ring-2 ring-white/80" : ""}
+                    />
+
+                    <span className="text-sm font-semibold">{c.name}</span>
+
                     {selected && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white text-primary shadow-soft"
+                        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white text-purple-600"
                       >
                         <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       </motion.div>
@@ -175,23 +187,25 @@ export default function VoteFlow() {
         </AnimatePresence>
       </div>
 
-      {/* Footer nav */}
+      {/* Footer */}
       <div className="sticky bottom-4 mx-auto mt-8 w-full max-w-2xl">
-        <div className="glass-card flex items-center gap-3 p-2">
+        <div className="card flex items-center gap-3 p-2">
           <Button
             type="button"
             variant="ghost"
             onClick={prev}
             disabled={step === 0}
-            className="h-12 flex-1 rounded-2xl text-muted-foreground disabled:opacity-40"
+            className="h-12 flex-1 rounded-xl text-gray-400 hover:text-white disabled:opacity-40"
           >
-            <ArrowLeft className="mr-1 h-4 w-4" /> Back
+            <ArrowLeft className="mr-1 h-4 w-4" />
+            Back
           </Button>
+
           <Button
             type="button"
             onClick={next}
             disabled={!currentAnswer || submitting}
-            className="h-12 flex-[2] rounded-2xl bg-gradient-primary font-semibold text-primary-foreground shadow-glow disabled:opacity-50"
+            className="h-12 flex-[2] rounded-xl bg-gradient-primary font-semibold text-white shadow-glow disabled:opacity-50"
           >
             {submitting ? "Submitting…" : isLast ? "Submit votes ✨" : "Next"}
             {!isLast && <ArrowRight className="ml-1 h-4 w-4" />}
@@ -199,5 +213,4 @@ export default function VoteFlow() {
         </div>
       </div>
     </div>
-  );
-}
+  );}

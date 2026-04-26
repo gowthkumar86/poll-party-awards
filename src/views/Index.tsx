@@ -45,97 +45,132 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen px-5 py-10 sm:py-16">
-      <div className="mx-auto w-full max-w-3xl space-y-8">
+    <div className="app-bg min-h-screen px-5 py-10 sm:py-16">
+      <div className="mx-auto w-full max-w-3xl space-y-10">
+
+        {/* HEADER */}
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-3 text-center"
+          className="text-center space-y-3"
         >
-          <h1 className="font-display text-5xl font-black tracking-tight sm:text-6xl">Poll Party Awards</h1>
-          <p className="mx-auto max-w-xl text-sm text-muted-foreground sm:text-base">
-            Create new polls, jump into an existing poll, or open dashboards for completed polls.
+          <h1 className="text-5xl sm:text-6xl font-black text-white tracking-tight">
+            Poll Party Awards
+          </h1>
+
+          <p className="mx-auto max-w-xl text-sm sm:text-base text-gray-400">
+            Create polls, expose your friends 😂, and reveal the results.
           </p>
         </motion.header>
 
+        {/* ACTION CARD */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="glass-card-strong space-y-4 p-5 sm:p-6"
+          className="card space-y-5 p-6"
         >
+          {/* Buttons */}
           <div className="flex flex-wrap gap-3">
             <Button
               type="button"
               onClick={() => router.push("/create")}
-              className="h-11 rounded-2xl bg-gradient-primary px-5 font-semibold text-primary-foreground shadow-glow"
+              className="h-11 rounded-xl bg-gradient-primary px-5 text-white font-semibold shadow-glow"
             >
-              <PlusCircle className="mr-2 h-4 w-4" /> Create new poll
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Create poll
             </Button>
+
             <Button
               type="button"
-              variant="outline"
               onClick={loadCompleted}
               disabled={loading}
-              className="h-11 rounded-2xl bg-white/80"
+              className="h-11 rounded-xl bg-[#0b1220] border border-white/10 text-gray-300 hover:text-white"
             >
-              <RefreshCw className="mr-2 h-4 w-4" /> {loading ? "Refreshing..." : "Refresh completed polls"}
+              <RefreshCw className="mr-2 h-4 w-4" />
+              {loading ? "Refreshing..." : "Refresh"}
             </Button>
           </div>
 
+          {/* Input */}
           <div className="space-y-2">
-            <Label htmlFor="poll-id-input">Open an existing poll/dashboard by ID</Label>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <Label className="text-gray-400 text-sm">
+              Open poll / dashboard
+            </Label>
+
+            <div className="flex flex-col sm:flex-row gap-3">
               <Input
-                id="poll-id-input"
                 value={pollIdInput}
                 onChange={(e) => setPollIdInput(e.target.value)}
                 placeholder="Paste poll id"
-                className="h-11 rounded-2xl bg-white/80"
+                className="h-11 rounded-xl bg-[#020617] border-white/10 text-white"
               />
+
               <div className="flex gap-2">
-                <Button type="button" variant="outline" onClick={() => openPoll(false)} className="h-11 rounded-2xl">
-                  Open poll
+                <Button
+                  type="button"
+                  onClick={() => openPoll(false)}
+                  className="h-11 rounded-xl bg-[#0b1220] border border-white/10 text-gray-300"
+                >
+                  Open
                 </Button>
-                <Button type="button" onClick={() => openPoll(true)} className="h-11 rounded-2xl">
-                  <LayoutDashboard className="mr-1.5 h-4 w-4" /> Open dashboard
+
+                <Button
+                  type="button"
+                  onClick={() => openPoll(true)}
+                  className="h-11 rounded-xl bg-gradient-primary text-white"
+                >
+                  <LayoutDashboard className="mr-1.5 h-4 w-4" />
+                  Dashboard
                 </Button>
               </div>
             </div>
           </div>
         </motion.div>
 
-        <section className="space-y-3">
+        {/* COMPLETED POLLS */}
+        <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-bold">Completed Poll Dashboards</h2>
-            <span className="text-xs text-muted-foreground">{polls.length} found</span>
+            <h2 className="text-2xl font-bold text-white">
+              Completed Polls
+            </h2>
+            <span className="text-xs text-gray-400">
+              {polls.length} found
+            </span>
           </div>
 
           {polls.length === 0 ? (
-            <div className="glass-card rounded-2xl p-5 text-sm text-muted-foreground">
-              No completed polls yet. Close a poll to see its dashboard listed here.
+            <div className="card p-5 text-sm text-gray-400 text-center">
+              No completed polls yet.
             </div>
           ) : (
-            <div className="grid gap-3">
+            <div className="grid gap-4">
               {polls.map((poll) => (
                 <div
                   key={poll.id}
-                  className="flex flex-col gap-3 rounded-2xl border border-white/70 bg-white/80 p-4 shadow-soft sm:flex-row sm:items-center sm:justify-between"
+                  className="card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
                 >
                   <div className="min-w-0">
-                    <p className="truncate font-semibold">{poll.title}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {new Date(poll.createdAt).toLocaleString()} • {poll.id}
+                    <p className="font-semibold text-white truncate">
+                      {poll.title}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {new Date(poll.createdAt).toLocaleString()}
                     </p>
                   </div>
-                  <Button type="button" onClick={() => router.push(`/dashboard/${poll.id}`)} className="rounded-2xl">
-                    View dashboard
+
+                  <Button
+                    type="button"
+                    onClick={() => router.push(`/dashboard/${poll.id}`)}
+                    className="rounded-xl bg-gradient-primary text-white"
+                  >
+                    View
                   </Button>
                 </div>
               ))}
             </div>
           )}
         </section>
+
       </div>
     </div>
   );

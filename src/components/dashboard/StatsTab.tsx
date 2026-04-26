@@ -26,7 +26,7 @@ function InsightCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`relative overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-4 shadow-soft`}
+      className={`relative overflow-hidden rounded-3xl border p-4 shadow-soft`}
     >
       <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-40 blur-xl ${tone}`} aria-hidden />
       <div className="relative">
@@ -152,7 +152,7 @@ export function StatsTab({ data, onOpenCategory }: Props) {
                 key={q.question.id}
                 type="button"
                 onClick={() => onOpenCategory(q.question.id)}
-                className="flex w-full items-center gap-3 rounded-2xl border border-white/70 bg-white/80 p-3 text-left shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated"
+                className="flex w-full items-center gap-3 rounded-2xl border p-3 text-left shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated"
               >
                 <span className="text-2xl">{q.question.emoji ?? "✨"}</span>
                 <div className="min-w-0 flex-1">

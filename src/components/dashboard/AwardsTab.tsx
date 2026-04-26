@@ -33,7 +33,7 @@ export function AwardsTab({ results, onOpen }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05, duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
             whileHover={{ y: -4 }}
-            className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-5 text-left shadow-soft transition hover:shadow-elevated"
+            className="group relative overflow-hidden rounded-3xl border p-5 text-left shadow-soft transition hover:shadow-elevated"
           >
             {/* Decorative gradient orb */}
             <div
